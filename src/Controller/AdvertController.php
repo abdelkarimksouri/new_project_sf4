@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Entity\Advert;
+use App\Entity\Category;
 use App\Entity\Media;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,7 +52,6 @@ class AdvertController extends Controller
         $em = $this->getDoctrine()->getManager();
         $repository = $em->getRepository(Advert::class);
         $advert = $repository->findOneById(intval($id));
-//        dump($advert->getImage());die;
         if (!$advert instanceof Advert) {
             $advert = [
                 'title'   => 'Recherche développpeur Symfony2',
@@ -67,13 +67,8 @@ class AdvertController extends Controller
 
     public function menu()
     {
-        // On fixe en dur une liste ici, bien entendu par la suite
-        // on la récupérera depuis la BDD !
-        $listAdverts = [
-            ['id' => 1, 'title' => 'Recherche développeur Symfony'],
-            ['id' => 2, 'title' => 'Mission de webmaster'],
-            ['id' => 3, 'title' => 'Offre de stage webdesigner']
-        ];
+        $em = $this->getDoctrine()->getManager();
+        $listAdverts = $em->getRepository(Advert::class)->findAll();
 
         return $this->render('Advert/menu.html.twig', [
             'listAdverts' => $listAdverts
@@ -83,7 +78,7 @@ class AdvertController extends Controller
     public function add(Request $request)
     {
         $advert = new Advert();
-        $advert->setTitle('test');
+        $advert->setTitle('Recherche développeur symfony 5');
         $advert->setContent("voila mon 1ere test statique pour enregistrer unn nouveau annonce");
         $advert->setAuthor('Abdelkarim');
         $advert->setPublished(true);
@@ -99,20 +94,54 @@ class AdvertController extends Controller
 
         $advert->setImage($image);
         $em = $this->getDoctrine()->getManager();
-
+        $listCategories = $em->getRepository(Category::class)->findAll();
+        if ($advert instanceof Advert)
+        {
+            foreach ($listCategories as $category)
+            {
+                $advert->addCategory($category);
+            }
+        }
         $em->persist($advert);
         $em->flush();
 
         return $this->render('Advert/add.html.twig');
     }
 
-    public function edit(Request $request)
+    public function edit(Request $request, $id)
     {
+        $em = $this->getDoctrine()->getManager();
+        $annonce = $em->getRepository(Advert::class)->find($id);
+
+        $listCategories = $em->getRepository(Category::class)->findAll();
+        if ($annonce instanceof Advert)
+        {
+            foreach ($listCategories as $category)
+            {
+                $annonce->addCategory($category);
+            }
+        }
+
+        $em->flush();
+
         return $this->render('Advert/edit.html.twig');
     }
-    public function delete(Request $request)
+    public function delete(Request $request, $id)
     {
-        return $this->render('Advert/delete.html.twig');
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository(Advert::class);
+        $advert = $repo->find($id);
+        if ($advert instanceof Advert)
+        {
+            foreach ($advert->getCategories() as $category)
+            {
+                $advert->removeCategory($category);
+            }
+        }
+        $em->remove($advert);
+        $em->flush();
+
+        return $this->render('Advert/index.html.twig');
     }
 
 }

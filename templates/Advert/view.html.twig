@@ -23,6 +23,11 @@
 
     <div class="well">
         {{ advert.content }}
+        <ul>
+            {% for categories in advert.categories %}
+                <li> {{ categories.name }}</li>
+            {% endfor %}
+        </ul>
     </div>
 
     <p>

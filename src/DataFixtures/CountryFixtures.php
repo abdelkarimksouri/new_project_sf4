@@ -4,10 +4,11 @@ namespace App\DataFixtures;
 
 use App\Entity\Address;
 use App\Entity\Country;
-use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectManager;
 use ParseCsv\Csv;
 
 class CountryFixtures  extends Fixture implements OrderedFixtureInterface, ContainerAwareInterface

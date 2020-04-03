@@ -25,6 +25,8 @@ class MediaFixtures extends Fixture implements OrderedFixtureInterface
             $media->setIsDeleted(false);
             $media->setUploadedAt(new \DateTime());
             $media->setLabel('label_'.$i);
+            $this->addReference('media_'.$i, $media);
+
             $manager->persist($media);
 
         }
