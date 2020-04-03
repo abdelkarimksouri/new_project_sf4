@@ -11,7 +11,7 @@ class Media
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
+     * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -60,12 +60,6 @@ class Media
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $treatedAt;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Pharmacy::class, cascade={"persist"})
-     */
-    protected $pharmacy;
-
 
     public function getId(): ?int
     {
@@ -180,21 +174,4 @@ class Media
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getPharmacy()
-    {
-        return $this->pharmacy;
-    }
-
-    /**
-     * @param mixed $pharmacy
-     * @return Media
-     */
-    public function setPharmacy($pharmacy)
-    {
-        $this->pharmacy = $pharmacy;
-        return $this;
-    }
 }
