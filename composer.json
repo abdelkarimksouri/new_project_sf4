@@ -32,7 +32,6 @@
         "symfony/monolog-bundle": "^3.1",
         "symfony/orm-pack": "^1.0",
         "symfony/process": "4.4.*",
-        "symfony/profiler-pack": "^1.0",
         "symfony/security-bundle": "4.4.*",
         "symfony/serializer-pack": "*",
         "symfony/translation": "4.4.*",
@@ -46,6 +45,7 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.3",
+        "symfony/profiler-pack": "^1.0",
         "symfony/test-pack": "*",
         "symfony/web-server-bundle": "4.4.*"
     },

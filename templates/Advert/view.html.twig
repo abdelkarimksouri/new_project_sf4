@@ -12,7 +12,7 @@
         <div class="col-sm-4 col-md-4" style="margin-right: 15px">
             {# On vérifie qu'une image soit bien associée à l'annonce #}
             {% if advert.image is not null %}
-                <img src="{{ advert.image.filePath }}" alt="{{ advert.image.label }}" width="300px" height="200px">
+                <img src="/uploads/img/{{ advert.image.id ~ '.' ~ advert.image.fileType }} " alt="{{ advert.image.label }}" width="300px" height="200px">
             {% endif %}
         </div>
        <div class="col-sm-8 col-md-6">
@@ -25,7 +25,7 @@
         {{ advert.content }}
         <ul>
             {% for categories in advert.categories %}
-                <li> {{ categories.name }}</li>
+                <li>{{ categories.name }}</li>
             {% endfor %}
         </ul>
     </div>

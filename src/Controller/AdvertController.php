@@ -6,7 +6,15 @@ namespace App\Controller;
 use App\Entity\Advert;
 use App\Entity\Category;
 use App\Entity\Media;
+use App\Form\AdvertType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\SubmitButton;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
@@ -14,36 +22,10 @@ use Twig\Environment;
 class AdvertController extends Controller
 {
 
-    public function index(Environment $twig)
+    public function index(Environment $twig, Request $request)
     {
-        // Notre liste d'annonce en dur
-        $listAdverts = [
-            [
-                'title'   => 'Recherche développpeur Symfony',
-                'id'      => 1,
-                'author'  => 'Alexandre',
-                'content' => 'Nous recherchons un développeur Symfony débutant sur Lyon. Blabla…',
-                'date'    => new \Datetime()
-            ],
-            [
-                'title'   => 'Mission de webmaster',
-                'id'      => 2,
-                'author'  => 'Hugo',
-                'content' => 'Nous recherchons un webmaster capable de maintenir notre site internet. Blabla…',
-                'date'    => new \Datetime()
-            ],
-            [
-                'title'   => 'Offre de stage webdesigner',
-                'id'      => 3,
-                'author'  => 'Mathieu',
-                'content' => 'Nous proposons un poste pour webdesigner. Blabla…',
-                'date'    => new \Datetime()
-            ]
-        ];
-
         // Et modifiez le 2nd argument pour injecter notre liste
         return $this->render('Advert/index.html.twig', [
-            'listAdverts' => $listAdverts
         ]);
     }
 
@@ -52,6 +34,7 @@ class AdvertController extends Controller
         $em = $this->getDoctrine()->getManager();
         $repository = $em->getRepository(Advert::class);
         $advert = $repository->findOneById(intval($id));
+
         if (!$advert instanceof Advert) {
             $advert = [
                 'title'   => 'Recherche développpeur Symfony2',
@@ -78,34 +61,32 @@ class AdvertController extends Controller
     public function add(Request $request)
     {
         $advert = new Advert();
-        $advert->setTitle('Recherche développeur symfony 5');
-        $advert->setContent("voila mon 1ere test statique pour enregistrer unn nouveau annonce");
-        $advert->setAuthor('Abdelkarim');
-        $advert->setPublished(true);
-
-        $image = new Media();
-        $image->setFilePath('http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg');
-        $image->setFileSize("25");
-        $image->setLabel("Red light");
-        $image->setIsDeleted(false);
-        $image->setIsTreated(true);
-        $image->setFileType('jpg');
-        $image->setUploadedAt(new \DateTime());
-
-        $advert->setImage($image);
         $em = $this->getDoctrine()->getManager();
-        $listCategories = $em->getRepository(Category::class)->findAll();
-        if ($advert instanceof Advert)
-        {
-            foreach ($listCategories as $category)
-            {
-                $advert->addCategory($category);
+        $repository = $em->getRepository(Advert::class);
+        $form = $this->get('form.factory')->create(AdvertType::class, $advert);
+
+        if ($request->isMethod('POST')) {
+//dump($request);
+            $form->handleRequest($request);
+//            dump($form);
+//            dump($form->getData());
+//            die;
+            if ($form->isValid() && $form->isSubmitted()) {
+//                $advert->getImage()->upload();
+                $em->persist($advert);
+//                dump($advert);
+//                die;
+                $em->flush();
+                $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
+
+                return $this->redirectToRoute('oc_platform_home');
             }
         }
-        $em->persist($advert);
-        $em->flush();
 
-        return $this->render('Advert/add.html.twig');
+        return $this->render('Advert/add.html.twig', [
+                'form' => $form->createView()
+            ]
+        );
     }
 
     public function edit(Request $request, $id)
