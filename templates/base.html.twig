@@ -57,39 +57,16 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script>
-
-        // jQuery(document).ready(function () {
-        //     jQuery('.add-another-collection-widget').click(function (e) {
-        //
-        //         var list = jQuery(jQuery(this).attr('data-list-selector'));
-        //         // Try to find the counter of the list or use the length of the list
-        //         var counter = list.data('widget-counter') || list.children().length;
-        //
-        //         // grab the prototype template
-        //         var newWidget = list.attr('data-prototype');
-        //         // replace the "__name__" used in the id and name of the prototype
-        //         // with a number that's unique to your emails
-        //         // end name attribute looks like name="contact[emails][2]"
-        //         newWidget = newWidget.replace(/__name__/g, counter);
-        //         // Increase the counter
-        //         counter++;
-        //         // And store it, the length cannot be used if deleting widgets is allowed
-        //         list.data('widget-counter', counter);
-        //
-        //         // create a new list element and add it to the list
-        //         var newElem = jQuery(list.attr('data-widget-tags')).html(newWidget);
-        //         newElem.appendTo(list);
-        //     });
-        // });
-
         jQuery(document).ready(function() {
             // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
             var container = $('#advert_categories');
+            // var container = $('#advert_image');
             // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
             var index = container.find(':input').length;
 
             // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
             jQuery('#add_category').click(function(e) {
+            // jQuery('#add_file').click(function(e) {
                 addCategory(container);
 
                 e.preventDefault(); // évite qu'un # apparaisse dans l'URL
