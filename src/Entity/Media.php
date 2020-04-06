@@ -222,10 +222,7 @@ class Media
 
         // Le nom du fichier est son id, on doit juste stocker également son extension
         // Pour faire propre, on devrait renommer cet attribut en « extension », plutôt que « url »
-//        dump(__FUNCTION__);
-//        dump($this->file->guessExtension());
-//        die;
-        $this->label = $this->file->guessExtension();
+        $this->label = $this->file->getClientOriginalName();
 
         $this->fileType = $this->file->guessExtension();
 

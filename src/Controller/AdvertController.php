@@ -34,7 +34,7 @@ class AdvertController extends Controller
         $em = $this->getDoctrine()->getManager();
         $repository = $em->getRepository(Advert::class);
         $advert = $repository->findOneById(intval($id));
-
+//        dump($advert->getCategories());die;
         if (!$advert instanceof Advert) {
             $advert = [
                 'title'   => 'Recherche développpeur Symfony2',
@@ -62,20 +62,12 @@ class AdvertController extends Controller
     {
         $advert = new Advert();
         $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository(Advert::class);
         $form = $this->get('form.factory')->create(AdvertType::class, $advert);
 
         if ($request->isMethod('POST')) {
-//dump($request);
             $form->handleRequest($request);
-//            dump($form);
-//            dump($form->getData());
-//            die;
             if ($form->isValid() && $form->isSubmitted()) {
-//                $advert->getImage()->upload();
                 $em->persist($advert);
-//                dump($advert);
-//                die;
                 $em->flush();
                 $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
 

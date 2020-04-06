@@ -25,7 +25,6 @@ class Category
      */
     protected $name;
 
-
     public function setId($id)
     {
         $this->id = $id;
@@ -43,4 +42,5 @@ class Category
     {
         return $this->name;
     }
+
 }
