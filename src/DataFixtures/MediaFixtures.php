@@ -4,7 +4,8 @@ namespace App\DataFixtures;
 
 use App\Entity\Media;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class MediaFixtures extends Fixture implements OrderedFixtureInterface
 {
@@ -24,7 +25,7 @@ class MediaFixtures extends Fixture implements OrderedFixtureInterface
             $media->setIsDeleted(false);
             $media->setUploadedAt(new \DateTime());
             $media->setLabel('label_'.$i);
-            $media->setPharmacy($this->getReference('pharmacy_'.$i));
+            $this->addReference('media_'.$i, $media);
 
             $manager->persist($media);
 

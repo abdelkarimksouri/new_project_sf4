@@ -6,6 +6,7 @@
 parameters:
     defaultOffset:  1
     defaultLimit:  10
+    directory_upload: '%kernel.project_dir%/public/uploads/img'
 
 services:
     # default configuration for services in *this* file

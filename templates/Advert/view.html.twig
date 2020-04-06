@@ -1,0 +1,48 @@
+{# src/OC/PlatformBundle/Resources/view/Advert/view.html.twig #}
+
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Lecture d'une annonce - {{ parent() }}
+{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-sm-4 col-md-4" style="margin-right: 15px">
+            {# On vérifie qu'une image soit bien associée à l'annonce #}
+            {% if advert.image is not null %}
+                <img src="/uploads/img/{{ advert.image.id ~ '.' ~ advert.image.fileType }} " alt="{{ advert.image.label }}" width="300px" height="200px">
+            {% endif %}
+        </div>
+       <div class="col-sm-8 col-md-6">
+        <h2>{{ advert.title }}</h2>
+        <i>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }}</i>
+       </div>
+    </div>
+
+    <div class="well">
+        {{ advert.content }}
+        <ul>
+            {% for categories in advert.categories %}
+                <li>{{ categories.name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <p>
+        <a href="{{ path('oc_platform_home') }}" class="btn btn-default">
+            <i class="glyphicon glyphicon-chevron-left"></i>
+            Retour à la liste
+        </a>
+        <a href="{{ path('oc_platform_edit', {'id': advert.id}) }}" class="btn btn-default">
+            <i class="glyphicon glyphicon-edit"></i>
+            Modifier l'annonce
+        </a>
+        <a href="{{ path('oc_platform_delete', {'id': advert.id}) }}" class="btn btn-danger">
+            <i class="glyphicon glyphicon-trash"></i>
+            Supprimer l'annonce
+        </a>
+    </p>
+
+{% endblock %}

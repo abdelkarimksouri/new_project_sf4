@@ -82,6 +82,10 @@ class Pharmacy
     private $drugs;
 
     /**
+     * @ORM\OneToOne(targetEntity=Media::class, cascade={"persist","remove"}, mappedBy="pharmacy")
+     */
+    private $logo;
+    /**
      * @JMS\Groups(groups={"pharmacy"})
      * @ORM\OneToOne(targetEntity=User::class, cascade={"persist","remove"})
      */
@@ -210,6 +214,17 @@ class Pharmacy
     public function setAddress($address)
     {
         $this->address = $address;
+        return $this;
+    }
+
+    public function getLogo()
+    {
+        return $this->logo;
+    }
+
+    public function setLogo($logo)
+    {
+        $this->logo = $logo;
         return $this;
     }
 

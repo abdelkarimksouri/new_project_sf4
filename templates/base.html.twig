@@ -1,12 +1,129 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}OC Plateforme{% endblock %}</title>
+
+    {% block stylesheets %}
+        {# On charge le CSS de bootstrap depuis le site directement #}
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    {% endblock %}
+</head>
+
+<body>
+<div class="container">
+    <div id="header" class="jumbotron">
+        <h1>Ma plateforme d'annonces</h1>
+        <p>
+            Ce projet est propulsé par Symfony,
+            et construit grâce au MOOC OpenClassrooms et SensioLabs.
+        </p>
+        <p>
+            <a class="btn btn-primary btn-lg" href="https://openclassrooms.com/courses/developpez-votre-site-web-avec-le-framework-symfony2">
+                Participer au MOOC »
+            </a>
+        </p>
+    </div>
+
+    <div class="row">
+        <div id="menu" class="col-md-3">
+            <h3>Les annonces</h3>
+            <ul class="nav nav-pills nav-stacked">
+                <li><a href="{{ path('oc_platform_home') }}">Accueil</a></li>
+                <li><a href="{{ path('oc_platform_add') }}">Ajouter une annonce</a></li>
+            </ul>
+
+            <h4>Dernières annonces</h4>
+            {{ render(controller('App\\Controller\\AdvertController::menu')) }}
+
+        </div>
+        <div id="content" class="col-md-9">
+            {% block body %}
+            {% endblock %}
+        </div>
+    </div>
+
+    <hr>
+
+    <footer>
+        <p>The sky's the limit © {{ 'now'|date('Y') }} and beyond.</p>
+    </footer>
+</div>
+
+{% block javascripts %}
+    {# Ajoutez ces lignes JavaScript si vous comptez vous servir des fonctionnalités du bootstrap Twitter #}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script>
+        jQuery(document).ready(function() {
+            // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
+            var container = $('#advert_categories');
+            // var container = $('#advert_image');
+            // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
+            var index = container.find(':input').length;
+
+            // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
+            jQuery('#add_category').click(function(e) {
+            // jQuery('#add_file').click(function(e) {
+                addCategory(container);
+
+                e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+                return false;
+            });
+
+            // On ajoute un premier champ automatiquement s'il n'en existe pas déjà un (cas d'une nouvelle annonce par exemple).
+            if (index == 0) {
+                addCategory(container);
+            } else {
+                // S'il existe déjà des catégories, on ajoute un lien de suppression pour chacune d'entre elles
+                container.children('div').each(function() {
+                    addDeleteLink(jQuery(this));
+                });
+            }
+
+            // La fonction qui ajoute un formulaire CategoryType
+            function addCategory(container) {
+                // Dans le contenu de l'attribut « data-prototype », on remplace :
+                // - le texte "__name__label__" qu'il contient par le label du champ
+                // - le texte "__name__" qu'il contient par le numéro du champ
+                var template = container.attr('data-prototype')
+                    .replace(/__name__label__/g, '')
+                    .replace(/__name__/g,        index)
+                ;
+                // On crée un objet jquery qui contient ce template
+                var prototype = jQuery(template);
+
+                // On ajoute au prototype un lien pour pouvoir supprimer la catégorie
+                addDeleteLink(prototype);
+
+                // On ajoute le prototype modifié à la fin de la balise <div>
+                container.append(prototype);
+
+                // Enfin, on incrémente le compteur pour que le prochain ajout se fasse avec un autre numéro
+                index++;
+            }
+
+            // La fonction qui ajoute un lien de suppression d'une catégorie
+            function addDeleteLink(prototype) {
+                // Création du lien
+                var deleteLink = jQuery('<a href="#" class="btn btn-danger">Supprimer</a>');
+
+                // Ajout du lien
+                prototype.append(deleteLink);
+
+                // Ajout du listener sur le clic du lien pour effectivement supprimer la catégorie
+                deleteLink.click(function(e) {
+                    prototype.remove();
+
+                    e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+                    return false;
+                });
+            }
+        });
+    </script>
+{% endblock %}
+
+</body>
 </html>
