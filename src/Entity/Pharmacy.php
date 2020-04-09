@@ -82,7 +82,7 @@ class Pharmacy
     private $drugs;
 
     /**
-     * @ORM\OneToOne(targetEntity=Media::class, cascade={"persist","remove"}, mappedBy="pharmacy")
+     * @ORM\OneToOne(targetEntity=Media::class, cascade={"persist"})
      */
     private $logo;
     /**
@@ -222,7 +222,11 @@ class Pharmacy
         return $this->logo;
     }
 
-    public function setLogo($logo)
+    /**
+     * @param Media $logo
+     * @return $this
+     */
+    public function setLogo(Media $logo)
     {
         $this->logo = $logo;
         return $this;

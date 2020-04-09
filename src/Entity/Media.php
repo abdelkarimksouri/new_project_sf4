@@ -191,7 +191,6 @@ class Media
     public function setFile(UploadedFile $file)
     {
         $this->file = $file;
-
         // On vérifie si on avait déjà un fichier pour cette entité
         if (null !== $this->label) {
             // On sauvegarde l'extension du fichier pour le supprimer plus tard
