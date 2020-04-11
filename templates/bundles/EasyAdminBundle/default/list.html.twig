@@ -16,6 +16,7 @@
     referer: null
 }) %}
 
+
 {% if 'search' == app.request.get('action') %}
     {% set _request_parameters = _request_parameters|merge({
         query: app.request.get('query')|default(''),
@@ -137,8 +138,6 @@
     {% set _fields_visible_by_user = fields|filter((metadata, field) => easyadmin_is_granted(metadata.permission)) %}
     {% set _number_of_hidden_results = 0 %}
     {% set _list_item_actions = easyadmin_get_actions_for_list_item(_entity_config.name) %}
-    {{ dump(app.user) }}
-    {{ dump(app.environment) }}
     <table class="table datagrid">
         <thead>
         {% block table_head %}

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ClientRepository")
  */
-class Client
+class Client extends User
 {
     /**
      * @ORM\Id()
@@ -25,11 +25,6 @@ class Client
      * @ORM\Column(type="string", length=200)
      */
     private $lastName;
-
-    /**
-     * @ORM\Column(type="string", length=200)
-     */
-    private $emailAddress;
 
     /**
      * @ORM\Column(type="integer")
@@ -60,6 +55,11 @@ class Client
      * @ORM\OneToOne(targetEntity=Address::class, cascade={"persist","remove"})
      */
     protected $address;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Media::class, cascade={"persist","remove"})
+     */
+    protected $logo;
 
     public function getId(): ?int
     {
@@ -177,6 +177,25 @@ class Client
     public function setAddress($address)
     {
         $this->address = $address;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLogo()
+    {
+        return $this->logo;
+    }
+
+    /**
+     * @param Media $logo
+     * @return $this
+     */
+    public function setLogo(Media $logo) : self
+    {
+        $this->logo = $logo;
+
         return $this;
     }
 }

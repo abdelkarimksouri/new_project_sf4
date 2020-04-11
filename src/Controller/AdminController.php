@@ -3,7 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Advert;
+use App\Entity\Drug;
+use App\Entity\Category;
+use App\Entity\Media;
+use App\Entity\Pharmacy;
+use App\Entity\User;
 use App\Form\AdvertType;
+use App\Form\DrugType;
+use App\Form\MediaType;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
@@ -56,13 +63,8 @@ class AdminController extends EasyAdminController
 
         $fields = $this->entity['list']['fields'];
         $paginator = $this->findAll($this->entity['class'], $this->request->query->get('page', 1), $this->entity['list']['max_results'], $this->request->query->get('sortField'), $this->request->query->get('sortDirection'), $this->entity['list']['dql_filter']);
-//        dump($paginator);
-//        die;
         $this->dispatch(EasyAdminEvents::POST_LIST, ['paginator' => $paginator]);
 
-//        dump("hererre");
-//        dump($this->createBatchForm($this->entity['name'])->createView());
-//        die;
         $parameters = [
             'paginator' => $paginator,
             'fields' => $fields,
@@ -92,12 +94,17 @@ class AdminController extends EasyAdminController
             $fields = $this->entity['new']['fields'];
             $newForm = $this->executeDynamicMethod('create<EntityName>NewForm', [$entity, $fields]);
         }
-
         $newForm->handleRequest($this->request);
         if ($newForm->isSubmitted() && $newForm->isValid()) {
-            $this->processUploadedFiles($newForm);
+//            $this->processUploadedFiles($newForm);
 
-            $this->dispatch(EasyAdminEvents::PRE_PERSIST, ['entity' => $entity]);
+//            $this->dispatch(EasyAdminEvents::PRE_PERSIST, ['entity' => $entity]);
+            if ($entity instanceof Drug) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($entity);
+                $em->flush();
+                return $this->redirectToReferrer();
+            }
             $this->executeDynamicMethod('persist<EntityName>Entity', [$entity, $newForm]);
             $this->dispatch(EasyAdminEvents::POST_PERSIST, ['entity' => $entity]);
 
@@ -109,6 +116,8 @@ class AdminController extends EasyAdminController
 //            'form' => $newForm,
 //            'entity' => $entity,
 //        ]);
+//        dump($newForm);
+//        die;
         $parameters = [
             'form' => $newForm->createView(),
 //            'entity_fields' => $fields,
@@ -162,7 +171,7 @@ class AdminController extends EasyAdminController
 
             return $this->redirectToReferrer();
         }
-        $this->dispatch(EasyAdminEvents::POST_EDIT);
+//        $this->dispatch(EasyAdminEvents::POST_EDIT);
         $parameters = [
             'form' => $editForm->createView(),
             'entity' => $entity,
@@ -172,6 +181,46 @@ class AdminController extends EasyAdminController
         return $this->executeDynamicMethod('render<EntityName>Template', ['edit', $this->entity['templates']['edit'], $parameters]);
     }
 
+    /**
+     * The method that is executed when the user performs a 'delete' action to
+     * remove any entity.
+     *
+     * @return RedirectResponse
+     *
+     * @throws EntityRemoveException
+     */
+    protected function deleteAction()
+    {
+        $id = $this->request->query->get('id');
+        $entity = $this->entity['name'];
+        switch ($entity) {
+            case 'User':
+                $entity = new User();
+                break;
+            case 'Advert':
+                $entity = new Advert();
+                break;
+            case 'Category';
+                $entity = new Category();
+                break;
+            case 'Pharmacy':
+                $entity = new Pharmacy();
+                break;
+            case 'Media':
+                $entity = new Media();
+                break;
+            case 'Drug':
+                $entity = new Drug();
+                break;
+        }
+        $em = $this->getDoctrine()->getManager();
+        $class = get_class($entity);
+        $form = $em->getRepository($class)->findOneBy(['id' => $id]);
+        $em->remove($form);
+        $em->flush();
+
+        return $this->redirectToReferrer();
+    }
 
     protected function executeDynamicMethod($methodNamePattern, array $arguments = [])
     {

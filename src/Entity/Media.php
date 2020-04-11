@@ -192,9 +192,9 @@ class Media
     {
         $this->file = $file;
         // On vérifie si on avait déjà un fichier pour cette entité
-        if (null !== $this->label) {
+        if (null !== $this->filePath) {
             // On sauvegarde l'extension du fichier pour le supprimer plus tard
-            $this->tempFilename = $this->label;
+            $this->tempFilename = $this->filePath;
 
             // On réinitialise les valeurs des attributs url et alt
             $this->label = null;
@@ -221,12 +221,12 @@ class Media
 
         // Le nom du fichier est son id, on doit juste stocker également son extension
         // Pour faire propre, on devrait renommer cet attribut en « extension », plutôt que « url »
-        $this->label = $this->file->getFileName();
+        $this->label = $this->file->getClientOriginalName();
 
         $this->fileType = $this->file->guessExtension();
-
+        $this->fileSize = $this->file->getSize();
         // Et on génère l'attribut alt de la balise <img>, à la valeur du nom du fichier sur le PC de l'internaute
-        $this->filePath = $this->file->getClientOriginalName();
+        $this->filePath = $this->id.$this->file->getClientOriginalName();
 
         $this->uploadedAt = new \DateTime();
 
@@ -258,7 +258,7 @@ class Media
         // On déplace le fichier envoyé dans le répertoire de notre choix
         $this->file->move(
             $this->getUploadRootDir(), // Le répertoire de destination
-            $this->id.'.'.$this->fileType   // Le nom du fichier à créer, ici « id.extension »
+            $this->filePath   // Le nom du fichier à créer, ici « id.extension »
         );
     }
 

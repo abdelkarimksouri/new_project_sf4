@@ -2,13 +2,16 @@
 
 namespace App\Form;
 
+use App\Entity\Category;
 use App\Entity\Drug;
 use App\Entity\Pharmacy;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use FSevestre\BooleanFormType\Form\Type\BooleanType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -28,7 +31,6 @@ class DrugType extends AbstractType
             ])
             ->add('isDeleted', ChoiceType::class, [
                 'choices' => [1, '1', true, 'true', 'on', 'yes'],
-                'empty_value' => [0, '0', false, 'false', 'off', 'no']
             ])
             ->add('expiredAt', DateTimeType::class, [
                 'widget' => 'single_text',
@@ -36,12 +38,20 @@ class DrugType extends AbstractType
                 'format' => 'YYYY-MM-dd',
                 'attr' => ['data-date-format' => 'YYYY-MM-DD']
             ])
-            ->add('pharmacy', EntityType::class, [
-                'class' => Pharmacy::class,
-                'choice_label' => 'generatedName',
-            ]);
+//            ->add('pharmacy', CollectionType::class, [
+//                'entry_type' => PharmacyType::class,
+//                'allow_add' => true,
+//                'allow_delete' => true,
+//            ]);
+          ->add('pharmacy', EntityType::class, [
+                'class'         => Pharmacy::class,
+                'choice_label'  => 'generatedName',
+                'multiple'      => true,
+            ])
+        ;
 
     }
+
 
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -51,8 +61,4 @@ class DrugType extends AbstractType
         ]);
     }
 
-    public function getName()
-    {
-        return 'drug';
-    }
 }

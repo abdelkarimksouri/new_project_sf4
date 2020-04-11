@@ -34,25 +34,24 @@ class SecurityController extends AbstractFOSRestController
             ->add('_username', null, ['label' => 'Email'])
             ->add('_password', PasswordType::class, ['label' => 'Mot de passe'])
             ->getForm();
-
-        if ($request->isMethod('POST')) {
-            $form->handleRequest($request);
-            $plainPassword = $form->getData()->getPassword();
-            $em = $this->getDoctrine()->getManager();
-            $existUser = $em->getRepository(User::class)->findOneBy([
-                'email' => $form->getData()->getEmail()
-            ]);
-            dump("herer");die;
-            if ($existUser instanceof User) {
-                if ($form->isSubmitted() && $form->isValid()) {
-                 if ($encoder->isPasswordValid($existUser, $plainPassword)) {
-                     return $this->render('bundles/EasyAdminBundle/page/content.html.twig', [
-                         'user' => $existUser
-                     ]);
-                 }
-                }
-            }
-        }
+ /* Not used */
+//        if ($request->isMethod('POST')) {
+//            $form->handleRequest($request);
+//            $plainPassword = $form->getData()->getPassword();
+//            $em = $this->getDoctrine()->getManager();
+//            $existUser = $em->getRepository(User::class)->findOneBy([
+//                'email' => $form->getData()->getEmail()
+//            ]);
+//            if ($existUser instanceof User) {
+//                if ($form->isSubmitted() && $form->isValid()) {
+//                 if ($encoder->isPasswordValid($existUser, $plainPassword)) {
+//                     return $this->render('bundles/EasyAdminBundle/page/content.html.twig', [
+//                         'user' => $existUser
+//                     ]);
+//                 }
+//                }
+//            }
+//        }
 
         return $this->render('bundles/EasyAdminBundle/page/login.html.twig', [
             'error' => $error,

@@ -3,19 +3,32 @@ easy_admin:
     entities:
         Category:
             class: App\Entity\Category
-            role: ROLE_ADMIN
             image_base_path: 'http://static.acme.org/img/'
+            default: true
+            permission: ROLE_USER
             list:
                 fields:
                     - { property: 'name', type: 'string' }
+            edit:
+            icon: 'user'
         Advert:
             class: App\Entity\Advert
-        Media:
-            class: App\Entity\Media
-            list:
-                file_base_path: '/uploads/img/'
+
+        Client:
+            class: App\Entity\Client
+            form:
                 fields:
-                    - { property: 'file_path', type: 'image', filename: 'filePath_7.png'}
+                    - { type: 'tab', label: 'Coordonné Client', icon: 'phone' }
+                    - { property: 'firstName', type: 'text', label: 'Prénom' }
+                    - { property: 'lastName', type: 'text', label: 'Nom' }
+                    - { property: 'emailAddress', type: 'email', label: 'Email' }
+                    - { property: 'age', type: 'integer', label: 'Age' }
+                    - { property: 'gender', type: 'integer', label: 'Age' }
+                    - { type: 'tab', label: 'Contact User', icon: 'user' }
+                    - { type: 'tab', label: 'Addresse', icon: 'customer' }
+
+
+
         User:
             class: App\Entity\User
             form:
@@ -28,4 +41,43 @@ easy_admin:
                     - { property: 'id', type: 'entier', width: 60 }
                     - { property: 'email', type: 'email', width: 50 }
                     - { property: 'roles'}
+        Drug:
+            class: App\Entity\Drug
+            image_base_path: '/uploads/img/'
+            form:
+                fields:
+                    - { property: 'drugName', type: 'text' }
+                    - { property: 'bareCode', type: 'text' }
+                    - { property: 'description', type: 'textarea' }
+                    - { property: 'price', type: 'money' }
+                    - { property: 'isDeleted', label: 'supprimer ?'}
+                    - { property: 'expiredAt', type: 'date' }
+                    - { property: 'deletedAt', type: 'date' }
+                    - { property: 'pharmacy', type_options: { class: 'App\Entity\Pharmacy', choice_label: 'generatedName', multiple: 'true'} }
+        Pharmacy:
+            class: App\Entity\Pharmacy
+            image_base_path: '/uploads/img/'
+            list:
+                fields:
+                    - { property: 'generatedName', type: 'text' }
+                    - { property: 'isActive', label: 'Active ?' }
+                    - { property: 'isNight', label: 'pharmacy de nuit ?' }
+                    - { property: 'isHoliday', label: 'pharmacy en vacance ?' }
+                    - { property: 'logo.filePath', label: 'Logo', type: 'image'}
+            new:
+                item_permission: [ROLE_ADMIN, ROLE_USER]
+            form:
+                fields:
+                    - { type: 'tab' , label: 'Basic Pharmacy Information' }
+                    - { property: 'generatedName', type: 'text' }
+                    - { property: 'isActive', label: 'Active ?' }
+                    - { property: 'isNight', label: 'pharmacy de nuit ?' }
+                    - { property: 'isHoliday', label: 'pharmacy en vacance ?' }
+                    - { property: 'logo', type: 'App\Form\MediaType' }
+                    - { type: 'tab', label: 'Contact User', icon: 'phone' }
+                    - property: 'user'
+                      type: 'App\Form\UserType'
+                    - { type: 'section', label: 'Adress Details' }
+                    - { property: 'address', label: 'Adresse', type: 'App\Form\AddressType' }
+
 

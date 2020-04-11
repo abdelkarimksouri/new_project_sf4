@@ -77,11 +77,6 @@ class Pharmacy
     private $deletedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Drug::class, cascade={"persist","remove"}, mappedBy="pharmacy")
-     */
-    private $drugs;
-
-    /**
      * @ORM\OneToOne(targetEntity=Media::class, cascade={"persist"})
      */
     private $logo;
@@ -91,10 +86,6 @@ class Pharmacy
      */
     private $user;
 
-    public function __construct()
-    {
-        $this->drugs = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {

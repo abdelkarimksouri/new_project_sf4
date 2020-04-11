@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Form\MediaType;
 
@@ -42,6 +43,16 @@ class PharmacyType extends AbstractType
             ->add('logo', MediaType::class)
         ;
     }
+
+//
+//    public function onPostSetData(FormEvent $event)
+//    {
+//        dump("hererer");die;
+//        if ($event->getData() && $event->getData()->getId()) {
+//            $form = $event->getForm();
+//            // unset($form['user']);
+//        }
+//    }
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -50,8 +61,4 @@ class PharmacyType extends AbstractType
         ]);
     }
 
-    public function getName()
-    {
-        return 'pharmacy';
-    }
 }

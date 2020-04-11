@@ -42,6 +42,11 @@ class User implements UserInterface, \Serializable
      */
     private $password;
 
+    public function __construct()
+    {
+        // your own logic
+        $this->roles = ['ROLE_USER'];
+    }
     public function getId(): ?int
     {
         return $this->id;
