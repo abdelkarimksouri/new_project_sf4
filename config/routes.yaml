@@ -1,3 +1,35 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+oc_platform_home:
+    path: /platforme
+    controller: App\Controller\AdvertController::index
+
+oc_platform_view:
+    path: /view_advert/{id}
+    controller: App\Controller\AdvertController::view
+    defaults:
+        id: 1
+    requirements:
+        id: '\d+'
+
+oc_platform_menu:
+    path: /menu_advert
+    controller: App\Controller\AdvertController::menu
+
+oc_platform_add:
+    path: /add_advert
+    controller: App\Controller\AdvertController::add
+    requirements:
+        methodes: GET|POST
+
+oc_platform_edit:
+    path: /edit_advert/{id}
+    controller: App\Controller\AdvertController::edit
+    requirements:
+        methodes: GET|POST
+        id: '\d+'
+
+oc_platform_delete:
+    path: /delete_advert/{id}
+    controller: App\Controller\AdvertController::delete
+    requirements:
+        methodes: GET|POST
+        id: '\d+'

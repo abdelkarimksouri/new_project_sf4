@@ -1,0 +1,81 @@
+{# src/OC/PlatformBundle/Resources/views/Advert/form.html.twig #}
+
+<h3>Formulaire d'annonce</h3>
+
+<div class="well">
+{#    {{ form_enctype(form, {'attr': {'class': 'form-horizontal'}}) }}#}
+    <form action="{{ path('oc_platform_add') }}" method="post" enctype="multipart/form-data">
+    {# Les erreurs générales du formulaire. #}
+    {{ form_errors(form) }}
+
+    {# Génération du label + error + widget pour un champ. #}
+    <div class="form-group row">
+            {{ form_label(form.date, "Date de la publication", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+            {{ form_errors(form.date) }}
+        <div class="col-sm-4">
+            {{ form_widget(form.date) }}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        {{ form_label(form.title, "Titre de l'annonce", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+        {{ form_errors(form.title) }}
+        <div class="col-sm-4">
+            {{ form_widget(form.title) }}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        {{ form_label(form.content, "Contenu de l'annonce", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+        {{ form_errors(form.content) }}
+        <div class="col-sm-4">
+            {{ form_widget(form.content) }}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        {{ form_label(form.author, "Author", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+        {{ form_errors(form.author) }}
+        <div class="col-sm-4">
+            {{ form_widget(form.author) }}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        {{ form_label(form.published, "Published", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+        {{ form_errors(form.published) }}
+        <div class="col-sm-4">
+            {{ form_widget(form.published) }}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        {{ form_label(form.slug, "Slug", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+        {{ form_errors(form.slug) }}
+        <div class="col-sm-4">
+            {{ form_widget(form.slug) }}
+        </div>
+    </div>
+
+    <div class="form-group row">
+        {{ form_label(form.image.label, "Picture", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+        {{ form_errors(form.image.file) }}
+        <div class="col-sm-4">
+            {{ form_widget(form.image.file) }}
+            <a href="#" id="add_file" class="btn btn-default">upload a picture</a>
+
+        </div>
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.categories) }}
+        {{ form_widget(form.categories) }}
+        <a href="#" id="add_category" class="btn btn-default">Ajouter une catégorie</a>
+    </div>
+
+    {# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
+    {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+
+    {{ form_row(form._token) }}
+</form>
+</div>
