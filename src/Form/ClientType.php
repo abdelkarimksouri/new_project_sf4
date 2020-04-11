@@ -2,6 +2,7 @@
 namespace App\Form;
 
 use App\Entity\Client;
+use Doctrine\DBAL\Types\IntegerType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -16,8 +17,13 @@ class ClientType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
-            ->add('email', EmailType::class)
-            ->add('password', PasswordType::class)
+            ->add('firstName', TextType::class)
+            ->add('lastName', TextType::class)
+            ->add('age', IntegerType::class)
+            ->add('gender', ChoiceType::class, [
+                'choices' => [0 => '', 1 => 'Homme', 2 => 'Femme'],
+                'multiple' => false,
+            ])
 //            ->add('roles', ChoiceType::class, [
 //                'multiple' => true,
 //                'expanded' => true,

@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ClientRepository")
  */
-class Client extends User
+class Client
 {
     /**
      * @ORM\Id()
@@ -42,6 +43,11 @@ class Client extends User
     private $phoneNumber;
 
     /**
+     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist","remove"})
+     */
+    private $user;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
@@ -60,6 +66,12 @@ class Client extends User
      * @ORM\OneToOne(targetEntity=Media::class, cascade={"persist","remove"})
      */
     protected $logo;
+
+    public function __construct()
+    {
+        $this->createdAt         = new \DateTime();
+        $this->updatedAt        = new \Datetime();
+    }
 
     public function getId(): ?int
     {
@@ -86,18 +98,6 @@ class Client extends User
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    public function getEmailAddress(): ?string
-    {
-        return $this->emailAddress;
-    }
-
-    public function setEmailAddress(string $emailAddress): self
-    {
-        $this->emailAddress = $emailAddress;
 
         return $this;
     }
@@ -143,7 +143,7 @@ class Client extends User
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt($createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -155,7 +155,7 @@ class Client extends User
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function setUpdatedAt($updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
@@ -195,6 +195,22 @@ class Client extends User
     public function setLogo(Media $logo) : self
     {
         $this->logo = $logo;
+
+        return $this;
+    }
+
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     * @return $this
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
 
         return $this;
     }

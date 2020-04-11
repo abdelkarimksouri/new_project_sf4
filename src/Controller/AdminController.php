@@ -96,9 +96,6 @@ class AdminController extends EasyAdminController
         }
         $newForm->handleRequest($this->request);
         if ($newForm->isSubmitted() && $newForm->isValid()) {
-//            $this->processUploadedFiles($newForm);
-
-//            $this->dispatch(EasyAdminEvents::PRE_PERSIST, ['entity' => $entity]);
             if ($entity instanceof Drug) {
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($entity);
@@ -111,16 +108,8 @@ class AdminController extends EasyAdminController
             return $this->redirectToReferrer();
         }
 
-//        $this->dispatch(EasyAdminEvents::POST_NEW, [
-//            'entity_fields' => $fields,
-//            'form' => $newForm,
-//            'entity' => $entity,
-//        ]);
-//        dump($newForm);
-//        die;
         $parameters = [
             'form' => $newForm->createView(),
-//            'entity_fields' => $fields,
             'entity' => $entity,
         ];
 

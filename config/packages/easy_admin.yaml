@@ -16,16 +16,30 @@ easy_admin:
 
         Client:
             class: App\Entity\Client
+            image_base_path: '/uploads/img/'
+            list:
+                fields:
+                    - { property: 'firstName', label: 'Prénom' }
+                    - { property: 'lastName', label: 'Nom' }
+                    - { property: 'user.email', label: 'Email' }
+                    - { property: 'age'}
+                    - { property: 'logo.filePath', label: 'Logo', type: 'image' }
             form:
                 fields:
                     - { type: 'tab', label: 'Coordonné Client', icon: 'phone' }
                     - { property: 'firstName', type: 'text', label: 'Prénom' }
                     - { property: 'lastName', type: 'text', label: 'Nom' }
-                    - { property: 'emailAddress', type: 'email', label: 'Email' }
+                    - { type: 'section', label: 'Contact User', icon: 'customer' }
+                    - property: 'user'
+                      type: 'App\Form\UserType'
+                    - { type: 'section', label: 'Suivre Client coordonée', icon: 'customer' }
                     - { property: 'age', type: 'integer', label: 'Age' }
-                    - { property: 'gender', type: 'integer', label: 'Age' }
-                    - { type: 'tab', label: 'Contact User', icon: 'user' }
+                    - { property: 'gender', type: 'choice', type_options: { multiple: false, choices: { 'Homme': '1', 'Femme': '2' } } }
+                    - { property: 'phoneNumber', type: 'tel', label: 'Téléphone' }
+                    - { property: 'logo', type: 'App\Form\MediaType' }
                     - { type: 'tab', label: 'Addresse', icon: 'customer' }
+                    - property: 'address'
+                      type: 'App\Form\AddressType'
 
 
 
