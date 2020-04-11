@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -78,9 +79,17 @@ class Drug
 
     /**
      * @JMS\Groups(groups={"drug"})
-     * @ORM\ManyToOne(targetEntity=Pharmacy::class, cascade={"persist"}, inversedBy="drugs")
+     * @ORM\ManyToMany(targetEntity=Pharmacy::class, cascade={"persist"} )
+     * @ORM\JoinTable(name="oc_pharmacy_drgus")
      */
     private $pharmacy;
+
+    public function __construct()
+    {
+        $this->createdAt         = new \Datetime();
+        $this->expiredAt         = new \Datetime();
+        $this->pharmacy          = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -220,12 +229,23 @@ class Drug
     }
 
     /**
-     * @param mixed $pharmacy
-     * @return Drug
+     * @param Pharmacy $pharmacy
      */
-    public function setPharmacy($pharmacy)
+    public function addPharmacy(Pharmacy $pharmacy)
     {
-        $this->pharmacy = $pharmacy;
+        $this->pharmacy[] = $pharmacy;
+
         return $this;
     }
+
+    /**
+     * @param Pharmacy $pharmacy
+     */
+    public function removePharmacy(Pharmacy $pharmacy)
+    {
+        $this->pharmacy->removeElement($pharmacy);
+
+        return $this;
+    }
+
 }
