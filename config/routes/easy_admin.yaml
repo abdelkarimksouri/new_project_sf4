@@ -2,3 +2,11 @@ easy_admin_bundle:
     resource: '@EasyAdminBundle/Controller/EasyAdminController.php'
     prefix: /admin
     type: annotation
+
+dashboard_admin:
+    resource: 'App\Controller\AdminController'
+    type: annotation
+
+easy_admin_login:
+    resource: 'App\Controller\SecurityController'
+    type: annotation

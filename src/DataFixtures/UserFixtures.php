@@ -8,6 +8,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserFixtures extends Fixture implements OrderedFixtureInterface,ContainerAwareInterface
 {
@@ -17,6 +18,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface,ContainerA
     {
         $this->container = $container;
     }
+
     public function load(ObjectManager $manager)
     {
         for ($i = 1; $i < 10; $i++) {
